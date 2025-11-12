@@ -1,0 +1,40 @@
+# Gradle
+.gradle/
+build/
+!gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+bin/
+
+# VS Code
+.vscode/
+
+# Fabric
+run/
+logs/
+crash-reports/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Minecraft
+options.txt
+saves/
+screenshots/
+resourcepacks/
+config/
+mods/
+*.log
