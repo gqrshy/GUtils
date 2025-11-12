@@ -14,6 +14,13 @@ GUtils is a **client-side Fabric mod** that provides various utility features fo
 - Looping support, volume & pitch control
 - Automatic cleanup of finished tracks
 
+#### 💰 UniTradeMarket Integration
+- Automatic input screens for UniTradeMarket servers
+- Price, quantity, and search input with validation
+- Real-time input validation before submission
+- Seamless integration with UniTradeMarket server mod
+- Works on any server with UniTradeMarket installed
+
 ### Why this mod?
 
 Cobblemon 1.7 introduced `BattleMusicPacket` for custom music playback, but **Cobblemon 1.6.1 clients cannot receive these packets**. This mod provides a compatibility layer using custom network packets, allowing 1.6.1 clients to enjoy custom music features from servers.
@@ -174,13 +181,20 @@ cd GUtils
 ### Project Structure
 
 ```
-src/main/kotlin/com/gashi/gutils/
-├── GUtils.kt                     # Main mod class
-├── network/
-│   ├── MusicPacket.kt            # Packet definition
-│   └── NetworkHandler.kt         # Packet receiver
-└── music/
-    └── MusicPlayer.kt            # Sound playback manager
+src/main/
+├── kotlin/com/gashi/gutils/
+│   ├── GUtils.kt                     # Main mod class
+│   ├── network/
+│   │   ├── MusicPacket.kt            # Packet definition
+│   │   └── NetworkHandler.kt         # Packet receiver
+│   └── music/
+│       └── MusicPlayer.kt            # Sound playback manager
+└── java/com/gashi/gutils/unitrademarket/
+    ├── UniTradeMarketIntegration.java    # UniTradeMarket integration
+    ├── network/
+    │   └── NetworkConstants.java         # Packet ID definitions
+    └── screen/
+        └── TradeInputScreen.java         # Input screen GUI
 ```
 
 ### API Usage

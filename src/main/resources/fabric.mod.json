@@ -3,7 +3,7 @@
   "id": "gutils",
   "version": "${version}",
   "name": "GUtils",
-  "description": "Gashi's client-side utility mod providing custom music player and other features for Cobblemon servers",
+  "description": "Gashi's client-side utility mod providing custom music player, UniTradeMarket integration, and other features for Cobblemon servers",
   "authors": [
     "Gashi"
   ],

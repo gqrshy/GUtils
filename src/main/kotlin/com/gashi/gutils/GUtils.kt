@@ -2,6 +2,7 @@ package com.gashi.gutils
 
 import com.gashi.gutils.music.MusicPlayer
 import com.gashi.gutils.network.NetworkHandler
+import com.gashi.gutils.unitrademarket.UniTradeMarketIntegration
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import org.slf4j.Logger
@@ -47,6 +48,14 @@ object GUtils : ClientModInitializer {
         } catch (e: Exception) {
             LOGGER.error("✗ Failed to register network handlers", e)
             return
+        }
+
+        // Initialize UniTradeMarket integration
+        try {
+            UniTradeMarketIntegration.initialize()
+            LOGGER.info("✓ UniTradeMarket integration initialized")
+        } catch (e: Exception) {
+            LOGGER.warn("⚠ UniTradeMarket integration not available: ${e.message}")
         }
 
         // Register tick event for cleanup
