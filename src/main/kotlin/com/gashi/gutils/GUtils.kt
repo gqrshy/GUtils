@@ -1,9 +1,12 @@
 package com.gashi.gutils
 
+import com.gashi.gutils.command.DebugCommand
 import com.gashi.gutils.music.MusicPlayer
 import com.gashi.gutils.network.NetworkHandler
+import com.gashi.gutils.sound.CobbleRankedSounds
 import com.gashi.gutils.unitrademarket.UniTradeMarketIntegration
 import net.fabricmc.api.ClientModInitializer
+import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -41,6 +44,24 @@ object GUtils : ClientModInitializer {
         LOGGER.info("  Initializing client-side utilities...")
         LOGGER.info("═══════════════════════════════════════════════════════")
 
+        // Register sound events (must be first, before network handlers)
+        try {
+            CobbleRankedSounds.initialize()
+            LOGGER.info("✓ Sound events registered successfully")
+        } catch (e: Exception) {
+            LOGGER.error("✗ Failed to register sound events", e)
+            return
+        }
+
+        // Register network payload types (must be first)
+        try {
+            com.gashi.gutils.network.PayloadRegistry.register()
+            LOGGER.info("✓ Payload types registered successfully")
+        } catch (e: Exception) {
+            LOGGER.error("✗ Failed to register payload types", e)
+            return
+        }
+
         // Register network packet receivers
         try {
             NetworkHandler.registerReceivers()
@@ -50,12 +71,31 @@ object GUtils : ClientModInitializer {
             return
         }
 
+        // Register client event handlers
+        try {
+            NetworkHandler.registerEventHandlers()
+            LOGGER.info("✓ Client event handlers registered successfully")
+        } catch (e: Exception) {
+            LOGGER.error("✗ Failed to register client event handlers", e)
+            return
+        }
+
         // Initialize UniTradeMarket integration
         try {
             UniTradeMarketIntegration.initialize()
             LOGGER.info("✓ UniTradeMarket integration initialized")
         } catch (e: Exception) {
             LOGGER.warn("⚠ UniTradeMarket integration not available: ${e.message}")
+        }
+
+        // Register client commands
+        try {
+            ClientCommandRegistrationCallback.EVENT.register { dispatcher, _ ->
+                DebugCommand.register(dispatcher)
+            }
+            LOGGER.info("✓ Client commands registered")
+        } catch (e: Exception) {
+            LOGGER.error("✗ Failed to register client commands", e)
         }
 
         // Register tick event for cleanup

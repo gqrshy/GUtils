@@ -1,13 +1,21 @@
 package com.gashi.gutils.network
 
 import com.gashi.gutils.GUtils
+import com.gashi.gutils.debug.ResourcePackDiagnostics
 import com.gashi.gutils.music.MusicPlayer
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 /**
  * Handles registration and processing of custom network packets
  */
 object NetworkHandler {
+
+    private val diagnosticsExecutor = Executors.newSingleThreadScheduledExecutor { r ->
+        Thread(r, "GUtils-Diagnostics").apply { isDaemon = true }
+    }
 
     /**
      * Register packet receivers for client-side
@@ -24,6 +32,43 @@ object NetworkHandler {
         }
 
         GUtils.LOGGER.info("Registered MusicPacket receiver (ID: ${MusicPacket.ID.id()})")
+    }
+
+    /**
+     * Register client event handlers
+     */
+    fun registerEventHandlers() {
+        // Send capability packet when joining a server
+        ClientPlayConnectionEvents.JOIN.register { handler, sender, client ->
+            try {
+                val payload = ClientCapabilityPayload(
+                    hasGUtilsMod = true,
+                    modVersion = GUtils.VERSION
+                )
+
+                // Send capability packet to server
+                sender.sendPacket(payload)
+
+                GUtils.LOGGER.info("Sent client capability packet to server (version: ${GUtils.VERSION})")
+
+                // Schedule resource pack diagnostics after a delay
+                // This allows time for the server resource pack to be downloaded and applied
+                diagnosticsExecutor.schedule({
+                    try {
+                        client.execute {
+                            ResourcePackDiagnostics.runFullDiagnostics()
+                        }
+                    } catch (e: Exception) {
+                        GUtils.LOGGER.error("Failed to run resource pack diagnostics", e)
+                    }
+                }, 5, TimeUnit.SECONDS)
+
+            } catch (e: Exception) {
+                GUtils.LOGGER.error("Failed to send client capability packet", e)
+            }
+        }
+
+        GUtils.LOGGER.info("Registered client event handlers")
     }
 
     /**
