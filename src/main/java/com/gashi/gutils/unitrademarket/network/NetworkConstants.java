@@ -33,6 +33,11 @@ public class NetworkConstants {
             return value;
         }
 
+        /**
+         * Parse InputType from string value
+         * @param value the string representation of the input type
+         * @return the corresponding InputType, or null if no match is found
+         */
         public static InputType fromString(String value) {
             for (InputType type : values()) {
                 if (type.value.equals(value)) {

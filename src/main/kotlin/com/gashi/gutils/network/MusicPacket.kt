@@ -62,11 +62,25 @@ data class MusicPacket(
 
         /**
          * Read packet from buffer
+         * @throws IllegalArgumentException if action is invalid or identifier is malformed
          */
         private fun read(buf: PacketByteBuf): MusicPacket {
-            val action = Action.valueOf(buf.readString())
+            val actionString = buf.readString()
+            val action = try {
+                Action.valueOf(actionString)
+            } catch (e: IllegalArgumentException) {
+                throw IllegalArgumentException("Invalid action type: $actionString", e)
+            }
+
             val hasMusicId = buf.readBoolean()
-            val musicId = if (hasMusicId) Identifier.of(buf.readString()) else null
+            val musicId = if (hasMusicId) {
+                try {
+                    Identifier.of(buf.readString())
+                } catch (e: Exception) {
+                    throw IllegalArgumentException("Invalid music identifier format", e)
+                }
+            } else null
+
             val volume = buf.readFloat()
             val pitch = buf.readFloat()
             val loop = buf.readBoolean()

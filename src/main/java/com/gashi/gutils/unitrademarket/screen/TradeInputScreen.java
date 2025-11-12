@@ -14,6 +14,10 @@ import net.minecraft.text.Text;
  * Client-side input screen for UniTradeMarket server integration
  */
 public class TradeInputScreen extends Screen {
+    // GLFW key codes
+    private static final int KEY_ENTER = 257;
+    private static final int KEY_ESCAPE = 256;
+
     private final NetworkConstants.InputType inputType;
     private final String promptMessage;
     private final int maxValue;
@@ -199,14 +203,14 @@ public class TradeInputScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         // Enter key = confirm
-        if (keyCode == 257) { // GLFW_KEY_ENTER
+        if (keyCode == KEY_ENTER) {
             if (validateAndSend()) {
                 close();
             }
             return true;
         }
         // Escape key = cancel
-        if (keyCode == 256) { // GLFW_KEY_ESCAPE
+        if (keyCode == KEY_ESCAPE) {
             sendCancelResponse();
             close();
             return true;

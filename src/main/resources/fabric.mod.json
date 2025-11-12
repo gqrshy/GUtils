@@ -11,7 +11,6 @@
     "sources": "https://github.com/gqrshy/GUtils"
   },
   "license": "MIT",
-  "icon": "icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [
