@@ -1,13 +1,12 @@
 package com.gashi.gutils.unitrademarket.screen;
 
+import com.gashi.gutils.unitrademarket.network.InputResponsePayload;
 import com.gashi.gutils.unitrademarket.network.NetworkConstants;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 
 /**
@@ -141,21 +140,13 @@ public class TradeInputScreen extends Screen {
     }
 
     private void sendInputResponse(String input) {
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeString(inputType.getValue());
-        buf.writeString(input);
-        buf.writeBoolean(true); // success
-
-        ClientPlayNetworking.send(NetworkConstants.INPUT_RESPONSE_PACKET, buf);
+        InputResponsePayload payload = new InputResponsePayload(inputType.getValue(), input);
+        ClientPlayNetworking.send(payload);
     }
 
     private void sendCancelResponse() {
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeString(inputType.getValue());
-        buf.writeString("");
-        buf.writeBoolean(false); // cancelled
-
-        ClientPlayNetworking.send(NetworkConstants.INPUT_RESPONSE_PACKET, buf);
+        InputResponsePayload payload = new InputResponsePayload(inputType.getValue(), "");
+        ClientPlayNetworking.send(payload);
     }
 
     @Override

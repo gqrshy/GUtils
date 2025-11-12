@@ -1,6 +1,6 @@
 package com.gashi.gutils.unitrademarket;
 
-import com.gashi.gutils.unitrademarket.network.NetworkConstants;
+import com.gashi.gutils.unitrademarket.network.*;
 import com.gashi.gutils.unitrademarket.screen.TradeInputScreen;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
@@ -33,11 +33,11 @@ public class UniTradeMarketIntegration {
 
     private static void registerPacketReceivers() {
         // Register price input request
-        ClientPlayNetworking.registerGlobalReceiver(NetworkConstants.REQUEST_PRICE_INPUT, (client, handler, buf, responseSender) -> {
+        ClientPlayNetworking.registerGlobalReceiver(PriceInputRequestPayload.ID, (payload, context) -> {
             try {
-                String promptMessage = buf.readString();
+                String promptMessage = payload.promptMessage();
 
-                client.execute(() -> {
+                context.client().execute(() -> {
                     try {
                         MinecraftClient.getInstance().setScreen(
                             new TradeInputScreen(NetworkConstants.InputType.PRICE, promptMessage, 0)
@@ -47,17 +47,17 @@ public class UniTradeMarketIntegration {
                     }
                 });
             } catch (Exception e) {
-                LOGGER.error("Failed to read price input packet", e);
+                LOGGER.error("Failed to handle price input packet", e);
             }
         });
 
         // Register quantity input request
-        ClientPlayNetworking.registerGlobalReceiver(NetworkConstants.REQUEST_QUANTITY_INPUT, (client, handler, buf, responseSender) -> {
+        ClientPlayNetworking.registerGlobalReceiver(QuantityInputRequestPayload.ID, (payload, context) -> {
             try {
-                String promptMessage = buf.readString();
-                int maxQuantity = buf.readInt();
+                String promptMessage = payload.promptMessage();
+                int maxQuantity = payload.maxQuantity();
 
-                client.execute(() -> {
+                context.client().execute(() -> {
                     try {
                         MinecraftClient.getInstance().setScreen(
                             new TradeInputScreen(NetworkConstants.InputType.QUANTITY, promptMessage, maxQuantity)
@@ -67,16 +67,16 @@ public class UniTradeMarketIntegration {
                     }
                 });
             } catch (Exception e) {
-                LOGGER.error("Failed to read quantity input packet", e);
+                LOGGER.error("Failed to handle quantity input packet", e);
             }
         });
 
         // Register search input request
-        ClientPlayNetworking.registerGlobalReceiver(NetworkConstants.REQUEST_SEARCH_INPUT, (client, handler, buf, responseSender) -> {
+        ClientPlayNetworking.registerGlobalReceiver(SearchInputRequestPayload.ID, (payload, context) -> {
             try {
-                String promptMessage = buf.readString();
+                String promptMessage = payload.promptMessage();
 
-                client.execute(() -> {
+                context.client().execute(() -> {
                     try {
                         MinecraftClient.getInstance().setScreen(
                             new TradeInputScreen(NetworkConstants.InputType.SEARCH, promptMessage, 0)
@@ -86,7 +86,7 @@ public class UniTradeMarketIntegration {
                     }
                 });
             } catch (Exception e) {
-                LOGGER.error("Failed to read search input packet", e);
+                LOGGER.error("Failed to handle search input packet", e);
             }
         });
 

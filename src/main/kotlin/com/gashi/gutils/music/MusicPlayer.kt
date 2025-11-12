@@ -45,21 +45,9 @@ object MusicPlayer {
 
             val soundEvent = soundEventOptional.get()
 
-            // Create sound instance
-            val soundInstance = PositionedSoundInstance(
-                soundEvent,
-                SoundCategory.MUSIC,
-                volume,
-                pitch,
-                if (loop) SoundInstance.createRandom() else null,  // Random seed for looping
-                loop,  // repeat
-                0,  // repeatDelay
-                SoundInstance.AttenuationType.NONE,  // No distance attenuation for music
-                0.0,  // x
-                0.0,  // y
-                0.0,  // z
-                true  // relative
-            )
+            // Create sound instance using factory method
+            // For music, we want it to play at the listener's position with no attenuation
+            val soundInstance = PositionedSoundInstance.master(soundEvent, volume, pitch)
 
             // Play the sound
             soundManager.play(soundInstance)
