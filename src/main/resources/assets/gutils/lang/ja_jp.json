@@ -1,0 +1,16 @@
+{
+  "gutils.screen.trade_input.title": "取引入力",
+  "gutils.screen.trade_input.button.confirm": "確定",
+  "gutils.screen.trade_input.button.cancel": "キャンセル",
+  "gutils.screen.trade_input.hint.price": "単価を入力してください",
+  "gutils.screen.trade_input.hint.quantity": "数量を入力してください（最大: %d）",
+  "gutils.screen.trade_input.hint.search": "検索ワードを入力してください",
+  "gutils.screen.trade_input.error.empty": "§c入力が空です！",
+  "gutils.screen.trade_input.error.price.negative": "§c価格は0より大きい必要があります！",
+  "gutils.screen.trade_input.error.price.too_high": "§c価格が高すぎます！",
+  "gutils.screen.trade_input.error.price.invalid_format": "§c価格の形式が無効です！",
+  "gutils.screen.trade_input.error.quantity.negative": "§c数量は0より大きい必要があります！",
+  "gutils.screen.trade_input.error.quantity.too_high": "§c最大数量: %d",
+  "gutils.screen.trade_input.error.quantity.invalid_format": "§c数量の形式が無効です！",
+  "gutils.screen.trade_input.error.search.too_short": "§c検索クエリは最低2文字必要です！"
+}

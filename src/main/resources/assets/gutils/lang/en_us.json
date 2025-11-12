@@ -1,0 +1,16 @@
+{
+  "gutils.screen.trade_input.title": "Trade Input",
+  "gutils.screen.trade_input.button.confirm": "Confirm",
+  "gutils.screen.trade_input.button.cancel": "Cancel",
+  "gutils.screen.trade_input.hint.price": "Enter price per unit",
+  "gutils.screen.trade_input.hint.quantity": "Enter quantity (max: %d)",
+  "gutils.screen.trade_input.hint.search": "Enter search term",
+  "gutils.screen.trade_input.error.empty": "§cInput cannot be empty!",
+  "gutils.screen.trade_input.error.price.negative": "§cPrice must be greater than 0!",
+  "gutils.screen.trade_input.error.price.too_high": "§cPrice is too high!",
+  "gutils.screen.trade_input.error.price.invalid_format": "§cInvalid price format!",
+  "gutils.screen.trade_input.error.quantity.negative": "§cQuantity must be greater than 0!",
+  "gutils.screen.trade_input.error.quantity.too_high": "§cMaximum quantity: %d",
+  "gutils.screen.trade_input.error.quantity.invalid_format": "§cInvalid quantity format!",
+  "gutils.screen.trade_input.error.search.too_short": "§cSearch query must be at least 2 characters!"
+}

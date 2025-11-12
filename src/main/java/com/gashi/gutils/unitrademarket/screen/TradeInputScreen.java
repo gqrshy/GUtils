@@ -25,7 +25,7 @@ public class TradeInputScreen extends Screen {
     private Text errorMessage;
 
     public TradeInputScreen(NetworkConstants.InputType inputType, String promptMessage, int maxValue) {
-        super(Text.literal("Trade Input"));
+        super(Text.translatable("gutils.screen.trade_input.title"));
         this.inputType = inputType;
         this.promptMessage = promptMessage;
         this.maxValue = maxValue;
@@ -70,14 +70,14 @@ public class TradeInputScreen extends Screen {
         addDrawableChild(inputField);
 
         // Confirm button
-        addDrawableChild(ButtonWidget.builder(Text.literal("Confirm"), button -> {
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gutils.screen.trade_input.button.confirm"), button -> {
             if (validateAndSend()) {
                 close();
             }
         }).dimensions(this.width / 2 - 100, this.height / 2 + 30, 95, 20).build());
 
         // Cancel button
-        addDrawableChild(ButtonWidget.builder(Text.literal("Cancel"), button -> {
+        addDrawableChild(ButtonWidget.builder(Text.translatable("gutils.screen.trade_input.button.cancel"), button -> {
             sendCancelResponse();
             close();
         }).dimensions(this.width / 2 + 5, this.height / 2 + 30, 95, 20).build());
@@ -87,7 +87,7 @@ public class TradeInputScreen extends Screen {
         String input = inputField.getText().trim();
 
         if (input.isEmpty()) {
-            errorMessage = Text.literal("§cInput cannot be empty!");
+            errorMessage = Text.translatable("gutils.screen.trade_input.error.empty");
             return false;
         }
 
@@ -97,15 +97,15 @@ public class TradeInputScreen extends Screen {
                 try {
                     double price = Double.parseDouble(input);
                     if (price <= 0) {
-                        errorMessage = Text.literal("§cPrice must be greater than 0!");
+                        errorMessage = Text.translatable("gutils.screen.trade_input.error.price.negative");
                         return false;
                     }
                     if (price > 999999999) {
-                        errorMessage = Text.literal("§cPrice is too high!");
+                        errorMessage = Text.translatable("gutils.screen.trade_input.error.price.too_high");
                         return false;
                     }
                 } catch (NumberFormatException e) {
-                    errorMessage = Text.literal("§cInvalid price format!");
+                    errorMessage = Text.translatable("gutils.screen.trade_input.error.price.invalid_format");
                     return false;
                 }
                 break;
@@ -114,22 +114,22 @@ public class TradeInputScreen extends Screen {
                 try {
                     int quantity = Integer.parseInt(input);
                     if (quantity <= 0) {
-                        errorMessage = Text.literal("§cQuantity must be greater than 0!");
+                        errorMessage = Text.translatable("gutils.screen.trade_input.error.quantity.negative");
                         return false;
                     }
                     if (quantity > maxValue) {
-                        errorMessage = Text.literal("§cMaximum quantity: " + maxValue);
+                        errorMessage = Text.translatable("gutils.screen.trade_input.error.quantity.too_high", maxValue);
                         return false;
                     }
                 } catch (NumberFormatException e) {
-                    errorMessage = Text.literal("§cInvalid quantity format!");
+                    errorMessage = Text.translatable("gutils.screen.trade_input.error.quantity.invalid_format");
                     return false;
                 }
                 break;
 
             case SEARCH:
                 if (input.length() < 2) {
-                    errorMessage = Text.literal("§cSearch query must be at least 2 characters!");
+                    errorMessage = Text.translatable("gutils.screen.trade_input.error.search.too_short");
                     return false;
                 }
                 break;
@@ -173,14 +173,14 @@ public class TradeInputScreen extends Screen {
         );
 
         // Draw hint
-        String hint = switch (inputType) {
-            case PRICE -> "Enter price per unit";
-            case QUANTITY -> "Enter quantity (max: " + maxValue + ")";
-            case SEARCH -> "Enter search term";
+        Text hint = switch (inputType) {
+            case PRICE -> Text.translatable("gutils.screen.trade_input.hint.price");
+            case QUANTITY -> Text.translatable("gutils.screen.trade_input.hint.quantity", maxValue);
+            case SEARCH -> Text.translatable("gutils.screen.trade_input.hint.search");
         };
         context.drawCenteredTextWithShadow(
             this.textRenderer,
-            "§7" + hint,
+            Text.literal("§7").append(hint),
             this.width / 2,
             this.height / 2 - 25,
             0xAAAAAA
