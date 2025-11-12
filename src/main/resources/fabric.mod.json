@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "gutils",
+  "version": "${version}",
+  "name": "GUtils",
+  "description": "Gashi's client-side utility mod providing custom music player and other features for Cobblemon servers",
+  "authors": [
+    "Gashi"
+  ],
+  "contact": {
+    "sources": "https://github.com/gqrshy/GUtils"
+  },
+  "license": "MIT",
+  "icon": "icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "com.gashi.gutils.GUtils"
+      }
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "~${minecraft_version}",
+    "java": ">=21",
+    "fabric-language-kotlin": ">=${fabric_kotlin_version}",
+    "cobblemon": ">=1.6.1"
+  },
+  "suggests": {
+    "cobbleranked": "*"
+  }
+}

@@ -1,0 +1,71 @@
+plugins {
+    kotlin("jvm") version "2.0.21"
+    id("fabric-loom") version "1.9.2"
+    `maven-publish`
+}
+
+version = project.property("mod_version") as String
+group = project.property("maven_group") as String
+
+base {
+    archivesName.set(project.property("archives_base_name") as String)
+}
+
+val targetJavaVersion = 21
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+    maven("https://maven.impactdev.net/repository/development/")
+}
+
+dependencies {
+    // Minecraft & Fabric
+    minecraft("com.mojang:minecraft:${property("minecraft_version")}")
+    mappings("net.fabricmc:yarn:${property("yarn_mappings")}:v2")
+    modImplementation("net.fabricmc:fabric-loader:${property("loader_version")}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${property("fabric_version")}")
+    modImplementation("net.fabricmc:fabric-language-kotlin:${property("fabric_kotlin_version")}")
+
+    // Cobblemon
+    modImplementation("com.cobblemon:fabric:${property("cobblemon_version")}")
+}
+
+tasks {
+    processResources {
+        inputs.property("version", project.version)
+        inputs.property("minecraft_version", project.property("minecraft_version"))
+        inputs.property("loader_version", project.property("loader_version"))
+        inputs.property("fabric_kotlin_version", project.property("fabric_kotlin_version"))
+
+        filesMatching("fabric.mod.json") {
+            expand(
+                mapOf(
+                    "version" to project.version,
+                    "minecraft_version" to project.property("minecraft_version"),
+                    "loader_version" to project.property("loader_version"),
+                    "fabric_kotlin_version" to project.property("fabric_kotlin_version")
+                )
+            )
+        }
+    }
+
+    withType<JavaCompile>().configureEach {
+        options.release = targetJavaVersion
+    }
+
+    withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        kotlinOptions {
+            jvmTarget = targetJavaVersion.toString()
+        }
+    }
+
+    jar {
+        from("LICENSE") {
+            rename { "${it}_${project.base.archivesName.get()}" }
+        }
+    }
+}
